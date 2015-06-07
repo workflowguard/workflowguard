@@ -49,7 +49,7 @@ workflowguard
     :alt: Scrutinizer Status
     :target: https://scrutinizer-ci.com/g/workflowguard/workflowguard/
 
-A simple yet powerful workflow managament toolkit
+A simple yet powerful workflow management toolkit
 
 * Free software: BSD license
 

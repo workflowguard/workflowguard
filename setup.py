@@ -26,7 +26,7 @@ setup(
     name='workflowguard',
     version='0.0.1',
     license='BSD',
-    description='A simple yet powerful workflow managament toolkit',
+    description='A simple yet powerful workflow management toolkit',
     long_description='%s\n%s' % (read('README.rst'), re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', read('CHANGELOG.rst'))),
     author='workflowguard',
     author_email='workflowguard@gmail.com',
