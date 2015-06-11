@@ -3,11 +3,7 @@ __version__ = "0.0.1"
 
 class State:
     """A State class"""
-    def __init__(self, name):
+    def __init__(self, name, label=''):
         self.name = name
+        self.label = label
 
-    def get_name(self):
-        return self.name
-
-    def set_name(self, name):
-        self.name = name

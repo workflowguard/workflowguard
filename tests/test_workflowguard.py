@@ -15,8 +15,10 @@ def test_main():
 def test_create_a_state():
     name1 = 'test1'
     name2 = 'test2'
-    state_object = State(name1)
-    assert state_object
-    assert state_object.get_name() == name1
-    state_object.set_name(name2)
-    assert state_object.get_name() == name2
+    label1 =  'test label 1'
+    state_object1 = State(name1)
+    state_object2 = State(name1, label1)
+    assert state_object1.name == name1
+    assert state_object1.label == ''
+    assert state_object2.label == label1
+
