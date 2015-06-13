@@ -1,7 +1,7 @@
 __version__ = "0.0.1"
 
 
-class State:
+class State(object):
     """A State class"""
     def __init__(self, name, label=''):
         """Create an instance of State
@@ -13,7 +13,7 @@ class State:
         self.label = label
 
 
-class FlowUnit:
+class FlowUnit(object):
     """FlowUnit Class
     This is a core class of the library. A flow_unit instance holds the current state. It is passed to the a
     relevant Action instance when the actions perform method is called. The available Action objects are defined by the
@@ -30,7 +30,7 @@ class FlowUnit:
         self.state = kwargs.get('state', State('initial', 'initial state'))
 
 
-class Action:
+class Action(object):
     """
     Action Class
     An instance of this class should be created for each action that is required by the system. An action carries out
