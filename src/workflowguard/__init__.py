@@ -45,7 +45,7 @@ class Action(object):
         Arguments:
         name: -- the name of this action
         Keyword arguments:
-        action -- the function that will be performed when this actions perform action is called
+        action -- the function that will be performed when this actions perform method is called
         """
         self.name = name
         self.action = kwargs.get('action', self._default_function)
