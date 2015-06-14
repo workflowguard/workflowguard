@@ -45,12 +45,12 @@ class Action(object):
         Arguments:
         name: -- the name of this action
         Keyword arguments:
-        action -- the function that will be performed when this actions perform method is called
+        action -- the function that will be performed when this action is called
         """
         self.name = name
         self.action = kwargs.get('action', self._default_function)
 
-    def perform(self, flow_unit, *args, **kwargs):
+    def __call__(self, flow_unit, *args, **kwargs):
         """Carries out the action on the provided flow_unit
         Arguments:
         flow_unit - the flow_unit instance that will have the processing caried out upon it.
@@ -58,3 +58,19 @@ class Action(object):
         as required by the action function for this Action instance.
         """
         self.action(flow_unit, *args, **kwargs)
+
+
+class Transition(object):
+    """
+    Transition class
+    An instance of this class holds a State instance and an associated Action instance. A FlowUnit instance is allowed
+    to carry out any action that is held by a transition with a state that matches the flow_unit state
+    """
+    def __init__(self, state, action, *args, **kwargs):
+        """Create an instance of Transition
+        Arguments:
+        state: -- a State object associated with this transition
+        action: -- a Action object that is allowed for the state
+        """
+        self.state = state
+        self.action = action

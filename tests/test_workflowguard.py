@@ -3,9 +3,7 @@ from click.testing import CliRunner
 
 from workflowguard.__main__ import main
 
-from workflowguard import State
-from workflowguard import Action
-from workflowguard import FlowUnit
+from workflowguard import State, Action, FlowUnit, Transition
 
 def test_main():
     runner = CliRunner()
@@ -39,10 +37,17 @@ def test_action():
     action1 = Action(name1)
     assert action1.name == name1
     flow_unit1 = FlowUnit('flow_unit1')
-    action1.perform(flow_unit1)
+    action1(flow_unit1)
     def change_state(flow_unit, *args, **kwargs):
         flow_unit.state = kwargs.get('state' or None)
     second_state = State('2ndState', 'Second State')
     action2 = Action('action2', action=change_state)
-    action2.perform(flow_unit1, state=second_state)
+    action2(flow_unit1, state=second_state)
     assert flow_unit1.state == second_state
+
+def test_transition():
+    action1 = Action('action1')
+    state_object1 = State('state1', 'state label 1')
+    transition = Transition(state_object1, action1)
+    assert transition.state == state_object1
+    assert transition.action == action1
