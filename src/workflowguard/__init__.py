@@ -19,7 +19,7 @@ class FlowUnit(object):
     relevant Action instance when the actions perform method is called. The available Action objects are defined by the
     Transition class and are dependant on the flow_units current state.
     """
-    def __init__(self, name, *args, **kwargs):
+    def __init__(self, name, state, *args, **kwargs):
         """Create an instance of FlowUnit
         Arguments:
         name: -- the name of this flow_unit
@@ -27,7 +27,7 @@ class FlowUnit(object):
         state -- initial state
         """
         self.name = name
-        self.state = kwargs.get('state', State('initial', 'initial state'))
+        self.state = state
 
 
 class Action(object):
@@ -53,11 +53,83 @@ class Action(object):
     def __call__(self, flow_unit, *args, **kwargs):
         """Carries out the action on the provided flow_unit
         Arguments:
-        flow_unit - the flow_unit instance that will have the processing caried out upon it.
+        flow_unit - the flow_unit instance that will have the processing carried out upon it.
         Keyword arguments:
         as required by the action function for this Action instance.
         """
         self.action(flow_unit, *args, **kwargs)
+
+
+class Actions(object):
+    """
+    Actions class
+    Holds a set of actions
+    """
+    def __init__(self, to_add=None):
+        if not to_add:
+            to_add = []
+        try:
+            self._actions = set(to_add)
+        except:
+            self._actions = set()
+            self._actions.add(to_add)
+
+    def __call__(self, *args, **kwargs):
+        return self._actions
+
+    def contains(self, obj):
+        """
+        Arguments:
+        obj of type action
+        Returns:
+        True - if obj is contained within self._actions
+        False - if obj is not contained within self._actions
+        """
+        return obj in self._actions
+
+    def add(self, elem):
+        """
+        adds elem to self.actions if not already present
+        Arguments:
+        elem obj of type action
+        """
+        self._actions.add(elem)
+
+
+class States(object):
+    """
+    States class
+    Holds a set of states
+    """
+    def __init__(self, to_add=None):
+        if not to_add:
+            to_add = []
+        try:
+            self._states = set(to_add)
+        except:
+            self._states = set()
+            self._states.add(to_add)
+
+    def __call__(self, *args, **kwargs):
+        return self._states
+
+    def contains(self, obj):
+        """
+        Arguments:
+        obj of type action
+        Returns:
+        True - if obj is contained within self._states
+        False - if obj is not contained within self._states
+        """
+        return obj in self._states
+
+    def add(self, elem):
+        """
+        adds elem to self._states if not already present
+        Arguments:
+        elem obj of type state
+        """
+        self._states.add(elem)
 
 
 class Transition(object):

@@ -3,7 +3,7 @@ from click.testing import CliRunner
 
 from workflowguard.__main__ import main
 
-from workflowguard import State, Action, FlowUnit, Transition
+from workflowguard import State, Action, FlowUnit, Transition, Actions, States
 
 def test_main():
     runner = CliRunner()
@@ -21,11 +21,12 @@ def test_state():
 
 def test_flow_unit():
     name1 = 'flow_unit1'
+    state_name1 = 'state1'
     name2 = 'flow_unit2'
-    flow_unit1 = FlowUnit(name1)
+    state_object1 = State(state_name1, 'state label 1')
+    flow_unit1 = FlowUnit(name1, state_object1)
     assert flow_unit1.name == name1
-    assert flow_unit1.state.name == 'initial'
-    state_object1 = State('state1', 'state label 1')
+    assert flow_unit1.state.name == state_name1
     flow_unit2 = FlowUnit(name2, state=state_object1)
     assert flow_unit2.state.name == state_object1.name
 
@@ -36,7 +37,8 @@ def test_action():
     action2_text = 'action2 text'
     action1 = Action(name1)
     assert action1.name == name1
-    flow_unit1 = FlowUnit('flow_unit1')
+    state_object1 = State('state1', 'state label 1')
+    flow_unit1 = FlowUnit('flow_unit1', state_object1)
     action1(flow_unit1)
     def change_state(flow_unit, *args, **kwargs):
         flow_unit.state = kwargs.get('state' or None)
@@ -51,3 +53,29 @@ def test_transition():
     transition = Transition(state_object1, action1)
     assert transition.state == state_object1
     assert transition.action == action1
+
+def test_actions():
+    action1 = Action('action1')
+    actions = Actions(action1)
+    assert actions
+    assert len(actions()) == 1
+    assert actions.contains(action1)
+    action2 = Action('action2')
+    actions.add(action2) # test another action can be added
+    assert actions.contains(action2)
+    assert len(actions()) == 2
+    actions.add(action2) # try adding it again
+    assert len(actions()) == 2
+
+def test_states():
+    state1 = State('state1', 'first State')
+    state2 = State('state2', 'second State')
+    states = States(state1)
+    assert states
+    assert states.contains(state1)
+    assert len(states()) == 1
+    states.add(state2) # test another state can be added
+    assert states.contains(state2)
+    assert len(states()) == 2
+    states.add(state2) # try adding it again
+    assert len(states()) == 2
