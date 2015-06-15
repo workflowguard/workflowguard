@@ -3,7 +3,9 @@ from click.testing import CliRunner
 
 from workflowguard.__main__ import main
 
-from workflowguard import State, Action, FlowUnit, Transition, Actions, States
+from workflowguard import State, Action, FlowUnit, Transition, Actions, States, Transitions
+from workflowguard.middleware import change_state
+
 
 def test_main():
     runner = CliRunner()
@@ -30,7 +32,6 @@ def test_flow_unit():
     flow_unit2 = FlowUnit(name2, state=state_object1)
     assert flow_unit2.state.name == state_object1.name
 
-
 def test_action():
     name1 = 'action1'
     name2 = 'action2'
@@ -40,8 +41,6 @@ def test_action():
     state_object1 = State('state1', 'state label 1')
     flow_unit1 = FlowUnit('flow_unit1', state_object1)
     action1(flow_unit1)
-    def change_state(flow_unit, *args, **kwargs):
-        flow_unit.state = kwargs.get('state' or None)
     second_state = State('2ndState', 'Second State')
     action2 = Action('action2', action=change_state)
     action2(flow_unit1, state=second_state)
@@ -79,3 +78,19 @@ def test_states():
     assert len(states()) == 2
     states.add(state2) # try adding it again
     assert len(states()) == 2
+
+def test_transitions():
+    state1 = State('state1', 'first State')
+    state2 = State('state2', 'second State')
+    action1 = Action('action1')
+    transition1 = Transition(state1, action1)
+    transition2 = Transition(state2, action1)
+    transitions = Transitions(transition1)
+    assert transitions
+    assert transitions.contains(transition1)
+    assert len(transitions()) == 1
+    transitions.add(transition2) # test another state can be added
+    assert transitions.contains(transition2)
+    assert len(transitions()) == 2
+    transitions.add(transition2) # try adding it again
+    assert len(transitions()) == 2

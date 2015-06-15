@@ -48,7 +48,8 @@ class Action(object):
         action -- the function that will be performed when this action is called
         """
         self.name = name
-        self.action = kwargs.get('action', self._default_function)
+        self._action = kwargs.get('action', self._default_function)
+        pass
 
     def __call__(self, flow_unit, *args, **kwargs):
         """Carries out the action on the provided flow_unit
@@ -57,7 +58,7 @@ class Action(object):
         Keyword arguments:
         as required by the action function for this Action instance.
         """
-        self.action(flow_unit, *args, **kwargs)
+        self._action(flow_unit, *args, **kwargs)
 
 
 class Actions(object):
@@ -146,3 +147,39 @@ class Transition(object):
         """
         self.state = state
         self.action = action
+
+
+class Transitions(object):
+    """
+    States class
+    Holds a set of states
+    """
+    def __init__(self, to_add=None):
+        if not to_add:
+            to_add = []
+        try:
+            self._transitions = set(to_add)
+        except:
+            self._transitions = set()
+            self._transitions.add(to_add)
+
+    def __call__(self, *args, **kwargs):
+        return self._transitions
+
+    def contains(self, obj):
+        """
+        Arguments:
+        obj of type action
+        Returns:
+        True - if obj is contained within self._transitions
+        False - if obj is not contained within self._transitions
+        """
+        return obj in self._transitions
+
+    def add(self, elem):
+        """
+        adds elem to self._transitions if not already present
+        Arguments:
+        elem obj of type Transition
+        """
+        self._transitions.add(elem)
