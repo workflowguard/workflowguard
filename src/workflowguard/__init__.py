@@ -36,11 +36,9 @@ class Action(object):
     An instance of this class should be created for each action that is required by the system. An action carries out
     processing on a FlowUnit instance and is what causes the State instance of a FlowUnit instance to change.
     """
-    def _default_function(flow_unit, *args, **kwargs):
-        """Return an informative message as we shouldn't ever need this function. """
-        print("default function your action has been created with no action function, surely you didn't mean to do this!")
 
-    def __init__(self, name, *args, **kwargs):
+
+    def __init__(self, name, action, *args, **kwargs):
         """Create an instance of Action
         Arguments:
         name: -- the name of this action
@@ -48,7 +46,7 @@ class Action(object):
         action -- the function that will be performed when this action is called
         """
         self.name = name
-        self._action = kwargs.get('action', self._default_function)
+        self._action = action
         pass
 
     def __call__(self, flow_unit, *args, **kwargs):

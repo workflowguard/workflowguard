@@ -2,7 +2,7 @@
 Functional tests for workflowguard
 """
 from workflowguard import State, Action, FlowUnit, Transition, Transitions
-from workflowguard.middleware import change_state
+from workflowguard.middleware import change_flow_unit_state
 
 
 """
@@ -12,13 +12,14 @@ Test a simple flow with a transition that allows an action that changes the flow
 def test_work_flow_simple_action():
     """
     This functional test creates a transition that allows a flow unit to have an action carried out upon it that changes
-    its state from 'first_state' to another state and tests that the
+    its state from 'first_state' to another state and tests that the it cna not be changed again since there is no
+    tranisition that allows the change for the new state
     :return:
     """
     #set up
     first_state = State('first_state', 'The first state')
     second_state = State('second_state', 'The second state')
-    action1 = Action('action1', action=change_state)
+    action1 = Action('action1', change_flow_unit_state)
     transition = Transition(first_state, action1)
     transitions = Transitions(transition)
     flow_unit = FlowUnit('flow_unit', first_state)

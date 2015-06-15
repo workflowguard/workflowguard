@@ -4,7 +4,7 @@ from click.testing import CliRunner
 from workflowguard.__main__ import main
 
 from workflowguard import State, Action, FlowUnit, Transition, Actions, States, Transitions
-from workflowguard.middleware import change_state
+from workflowguard.middleware import change_flow_unit_state, dummy_action
 
 
 def test_main():
@@ -15,51 +15,47 @@ def test_main():
     assert result.exit_code == 0
 
 def test_state():
-    name1 = 'state1'
-    label1 =  'state label 1'
-    state_object1 = State(name1, label1)
-    assert state_object1.name == name1
-    assert state_object1.label == label1
+    state_name1 = 'state1'
+    state_label1 =  'state label 1'
+    state1 = State(state_name1, state_label1)
+    assert state1.name == state_name1
+    assert state1.label == state_label1
 
 def test_flow_unit():
-    name1 = 'flow_unit1'
+    flow_unit_name1 = 'flow_unit1'
+    flow_unit_name2 = 'flow_unit2'
     state_name1 = 'state1'
-    name2 = 'flow_unit2'
-    state_object1 = State(state_name1, 'state label 1')
-    flow_unit1 = FlowUnit(name1, state_object1)
-    assert flow_unit1.name == name1
-    assert flow_unit1.state.name == state_name1
-    flow_unit2 = FlowUnit(name2, state_object1)
-    assert flow_unit2.state.name == state_object1.name
+    state_label1 =  'state label 1'
+    state1 = State(state_name1, state_label1)
+    flow_unit1 = FlowUnit(flow_unit_name1, state1)
+    assert flow_unit1.name == flow_unit_name1
+    assert flow_unit1.state == state1
 
 def test_action():
-    name1 = 'action1'
-    name2 = 'action2'
-    action2_text = 'action2 text'
-    action1 = Action(name1)
-    assert action1.name == name1
-    state_object1 = State('state1', 'state label 1')
-    flow_unit1 = FlowUnit('flow_unit1', state_object1)
-    action1(flow_unit1)
-    second_state = State('2ndState', 'Second State')
-    action2 = Action('action2', action=change_state)
-    action2(flow_unit1, second_state)
-    assert flow_unit1.state == second_state
+    action_name1 = 'action1'
+    action1 = Action(action_name1,dummy_action)
+    assert action1.name == action_name1
+    assert action1(None) == None
 
 def test_transition():
-    action1 = Action('action1')
-    state_object1 = State('state1', 'state label 1')
-    transition = Transition(state_object1, action1)
-    assert transition.state == state_object1
+    action_name1 = 'action1'
+    action1 = Action(action_name1,dummy_action)
+    state_name1 = 'state1'
+    state_label1 =  'state label 1'
+    state1 = State(state_name1, state_label1)
+    transition = Transition(state1, action1)
+    assert transition.state == state1
     assert transition.action == action1
 
 def test_actions():
-    action1 = Action('action1')
+    action_name1 = 'action1'
+    action1 = Action(action_name1,dummy_action)
     actions = Actions(action1)
     assert actions
     assert len(actions()) == 1
     assert actions.contains(action1)
-    action2 = Action('action2')
+    action_name2 = 'action2'
+    action2 = Action(action_name2,dummy_action)
     actions.add(action2) # test another action can be added
     assert actions.contains(action2)
     assert len(actions()) == 2
@@ -67,8 +63,12 @@ def test_actions():
     assert len(actions()) == 2
 
 def test_states():
-    state1 = State('state1', 'first State')
-    state2 = State('state2', 'second State')
+    state_name1 = 'state1'
+    state_label1 =  'state label 1'
+    state1 = State(state_name1, state_label1)
+    state_name2 = 'state2'
+    state_label2 =  'state label 2'
+    state2 = State(state_name2, state_label2)
     states = States(state1)
     assert states
     assert states.contains(state1)
@@ -80,9 +80,13 @@ def test_states():
     assert len(states()) == 2
 
 def test_transitions():
-    state1 = State('state1', 'first State')
-    state2 = State('state2', 'second State')
-    action1 = Action('action1')
+    state_name1 = 'state1'
+    state_label1 =  'state label 1'
+    state1 = State(state_name1, state_label1)
+    state_name2 = 'state2'
+    state_label2 =  'state label 2'
+    state2 = State(state_name2, state_label2)
+    action1 = Action('action1', dummy_action)
     transition1 = Transition(state1, action1)
     transition2 = Transition(state2, action1)
     transitions = Transitions(transition1)
@@ -94,3 +98,4 @@ def test_transitions():
     assert len(transitions()) == 2
     transitions.add(transition2) # try adding it again
     assert len(transitions()) == 2
+
