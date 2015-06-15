@@ -149,8 +149,8 @@ class Transition(object):
 
 class Transitions(object):
     """
-    States class
-    Holds a set of states
+    Transitions class
+    Holds a set of Transition
     """
     def __init__(self, to_add=None):
         if not to_add:
