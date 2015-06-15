@@ -26,6 +26,8 @@ class FlowUnit(object):
         Keyword arguments:
         state -- initial state
         """
+        self.args = args
+        self.kwargs = kwargs
         self.name = name
         self.state = state
 
