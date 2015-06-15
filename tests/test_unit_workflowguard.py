@@ -29,7 +29,7 @@ def test_flow_unit():
     flow_unit1 = FlowUnit(name1, state_object1)
     assert flow_unit1.name == name1
     assert flow_unit1.state.name == state_name1
-    flow_unit2 = FlowUnit(name2, state=state_object1)
+    flow_unit2 = FlowUnit(name2, state_object1)
     assert flow_unit2.state.name == state_object1.name
 
 def test_action():
@@ -43,7 +43,7 @@ def test_action():
     action1(flow_unit1)
     second_state = State('2ndState', 'Second State')
     action2 = Action('action2', action=change_state)
-    action2(flow_unit1, state=second_state)
+    action2(flow_unit1, second_state)
     assert flow_unit1.state == second_state
 
 def test_transition():

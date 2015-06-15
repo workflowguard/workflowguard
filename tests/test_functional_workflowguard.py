@@ -26,11 +26,12 @@ def test_work_flow_simple_action():
     #first test change state from first_state to second_state
     for transition in transitions():
         if flow_unit.state == transition.state:
-            transition.action(flow_unit, state=second_state)
+            transition.action(flow_unit, second_state)
     assert flow_unit.state == second_state
 
     #second test do not change state as no allowable transition is present
     for transition in transitions():
         if flow_unit.state == transition.state:
-            transition.action(flow_unit, state=first_state)
+            transition.action(flow_unit, first_state)
     assert flow_unit.state == second_state
+test_work_flow_simple_action()
